@@ -22,7 +22,7 @@ jobs:
       - run: flutter analyze .
       - run: flutter test
 
-      - run: flutter build web --release
+      - run: flutter build web --release --base-href="/wwmap/"
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
