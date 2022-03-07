@@ -17,7 +17,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     _mapSource = const MapShapeSource.asset(
-      'new_zealand_district.json',
+      'assets/new_zealand_district.json',
       shapeDataField: 'NAME_1',
     );
     _controller = MapShapeLayerController();
