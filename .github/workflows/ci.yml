@@ -17,11 +17,11 @@ jobs:
       - run: flutter config --enabe-web
 
       - run: flutter format --set-exit-if-changed .
-                  
+
       # Statically analyze the Dart code for any errors.
       - run: flutter analyze .
       - run: flutter test
-                                                
+
       - run: flutter build web --release
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
@@ -39,7 +39,7 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@master
         with:
-          name: web-build 
+          name: web-build
       - name: Display structure of build files
         run: ls -R
         working-directory: ./web
