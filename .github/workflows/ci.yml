@@ -40,9 +40,10 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: web-build
+          path: build/web
       - name: Display structure of build files
         run: ls -R
-        working-directory: ./web
+        working-directory: build/web
       - name: Deploy to GH Pages
         run: |
           cd build/web
