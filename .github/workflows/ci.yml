@@ -1,0 +1,59 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build_web:
+    name: Build Flutter (Web)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+            channel: 'dev'
+      - run: flutter pub get
+      - run: flutter config --enabe-web
+
+      - run: flutter format --set-exit-if-changed .
+                  
+      # Statically analyze the Dart code for any errors.
+      - run: flutter analyze .
+      - run: flutter test
+                                                
+      - run: flutter build web --release
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: web-build
+          path: build/web
+
+  publish_gh_pages:
+    needs: build_web
+    name: Publish Github Pages
+    runs-on: ubuntu-latest
+    env:
+      my_secret: ${{ secrets.commit_secret }}
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: web-build 
+      - name: Display structure of build files
+        run: ls -R
+        working-directory: ./web
+      - name: Deploy to GH Pages
+        run: |
+          cd build/web
+          git init
+
+          git config --global user.email drorasaf87@gmail.com
+          git config --global user.name "Dror Asaf"
+
+          git status
+          git remote add origin https://${{secrets.commit_secret}}@github.com/wildlifeai/wwmap.git
+          git checkout -b gh-pages
+          git add --all
+          git commit -m "update application"
+          git push origin gh-pages -f
